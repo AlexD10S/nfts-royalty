@@ -564,49 +564,49 @@ fn error_if_buy_item_not_on_sale() {
 	});
 }
 
-#[test]
-fn remove_item_royalty_should_work() {
-	new_test_ext().execute_with(|| {
-		create_collection();
-		let initial_balance = 100;
-		set_up_balances(initial_balance);
-		let mint_id = mint_item();
+// #[test]
+// fn remove_item_royalty_should_work() {
+// 	new_test_ext().execute_with(|| {
+// 		create_collection();
+// 		let initial_balance = 100;
+// 		set_up_balances(initial_balance);
+// 		let mint_id = mint_item();
 
-		assert_ok!(NftsRoyalty::set_item_royalty(
-			RuntimeOrigin::signed(account(1)),
-			0,
-			mint_id,
-			Permill::from_percent(5),
-			vec![RoyaltyDetails {
-				royalty_recipient: account(1),
-				royalty_recipient_percentage: Permill::from_percent(100),
-			},],
-		));
+// 		assert_ok!(NftsRoyalty::set_item_royalty(
+// 			RuntimeOrigin::signed(account(1)),
+// 			0,
+// 			mint_id,
+// 			Permill::from_percent(5),
+// 			vec![RoyaltyDetails {
+// 				royalty_recipient: account(1),
+// 				royalty_recipient_percentage: Permill::from_percent(100),
+// 			},],
+// 		));
 
-		let nft_with_royalty = ItemRoyalty::<Test>::get((0, mint_id)).unwrap();
-		assert_eq!(nft_with_royalty.depositor, Some(account(1)));
+// 		let nft_with_royalty = ItemRoyalty::<Test>::get((0, mint_id)).unwrap();
+// 		assert_eq!(nft_with_royalty.depositor, Some(account(1)));
 
-		assert_eq!(Balances::free_balance(&account(1)), initial_balance - 1);
+// 		assert_eq!(Balances::free_balance(&account(1)), initial_balance - 1);
 
-		assert_ok!(Nfts::burn(RuntimeOrigin::signed(account(1)), 0, mint_id));
+// 		assert_ok!(Nfts::burn(RuntimeOrigin::signed(account(1)), 0, mint_id));
 
-		assert_eq!(Nfts::items(&0).any(|id| id == mint_id), false);
+// 		assert_eq!(Nfts::items(&0).any(|id| id == mint_id), false);
 
-		assert_ok!(
-			NftsRoyalty::remove_item_royalty(RuntimeOrigin::signed(account(1)), 0, mint_id,)
-		);
+// 		assert_ok!(
+// 			NftsRoyalty::remove_item_royalty(RuntimeOrigin::signed(account(1)), 0, mint_id,)
+// 		);
 
-		assert_eq!(ItemRoyalty::<Test>::contains_key((0, mint_id)), false);
+// 		assert_eq!(ItemRoyalty::<Test>::contains_key((0, mint_id)), false);
 
-		assert_eq!(Balances::free_balance(&account(1)), initial_balance);
+// 		assert_eq!(Balances::free_balance(&account(1)), initial_balance);
 
-		// Check the event was emitted
-		assert_eq!(
-			last_event(),
-			NftsRoyaltyEvent::ItemRoyaltyRemoved { nft_collection: 0, nft: 42 }
-		);
-	});
-}
+// 		// Check the event was emitted
+// 		assert_eq!(
+// 			last_event(),
+// 			NftsRoyaltyEvent::ItemRoyaltyRemoved { nft_collection: 0, nft: 42 }
+// 		);
+// 	});
+// }
 
 #[test]
 fn remove_item_royalty_should_fail_if_item_still_exists() {

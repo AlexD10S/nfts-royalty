@@ -47,7 +47,7 @@ use frame_support::{
 	sp_runtime::Permill,
 	traits::{
 		tokens::nonfungibles_v2::{
-			// Buy as NonFungiblesBuy, 
+			Trading as NonFungiblesTrading, 
             Inspect as NonFungiblesInspect,
 			InspectEnumerable as NonFungiblesInspectEnumerable, Transfer,
 		},
@@ -97,11 +97,11 @@ pub mod pallet {
 				Self::AccountId,
 				ItemId = Self::NftItemId,
 				CollectionId = Self::NftCollectionId,
-			// > + NonFungiblesBuy<
-			// 	Self::AccountId,
-			// 	ItemPrice<Self>,
-			// 	ItemId = Self::NftItemId,
-			// 	CollectionId = Self::NftCollectionId,
+			> + NonFungiblesTrading<
+				Self::AccountId,
+				ItemPrice<Self>,
+				ItemId = Self::NftItemId,
+				CollectionId = Self::NftCollectionId,
 			> + Transfer<Self::AccountId>;
 
 		/// The maximum number of royalty recipients.
